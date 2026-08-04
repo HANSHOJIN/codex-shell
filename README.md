@@ -81,3 +81,5 @@ npm run tauri build
 ## 免责声明
 
 CodexShell 是独立开源项目，名称、图标和实现不代表与 OpenAI、ChatGPT 或 Codex 存在官方关联或授权关系。
+
+> 如果引用或基于本项目进行开发，请保留 `UI shell by CodexShell` 署名，以及项目地址：https://github.com/HANSHOJIN/codex-shell

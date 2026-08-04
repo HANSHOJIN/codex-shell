@@ -78,6 +78,8 @@ This project is released under the [MIT License](LICENSE).
 ## Disclaimer
 
 CodexShell was created as an independent open-source project based on personal interest and practical project needs. Its name, icon, and implementation are not affiliated with or authorized by OpenAI, ChatGPT, or Codex.
+
+> If you reuse or build on this project, please keep the attribution `UI shell by CodexShell` and the project address: https://github.com/HANSHOJIN/codex-shell
 # CodexShell
 
 ## Screenshots
