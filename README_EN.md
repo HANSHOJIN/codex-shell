@@ -4,6 +4,8 @@ A desktop shell inspired by the Codex interaction layout, designed for building 
 
 CodexShell provides the window structure, panel layout, and basic interactions without binding itself to a specific business domain. Developers can use it as a foundation for chat interfaces, editors, terminals, file managers, data panels, or other desktop applications.
 
+Project repository: [github.com/HANSHOJIN/codex-shell](https://github.com/HANSHOJIN/codex-shell)
+
 ## Features
 
 - Codex-style desktop window and top navigation
