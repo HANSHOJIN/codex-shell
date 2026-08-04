@@ -76,7 +76,13 @@ npm run tauri build
 
 ## 开源许可
 
-本项目采用 [MIT License](LICENSE) 开源。使用本框架时，请保留 CodexShell 字样和项目地址。
+本项目采用 [MIT License](https://github.com/HANSHOJIN/codex-shell/blob/master/LICENSE) 开源。使用本框架时，请保留 CodexShell 字样和项目地址。
+
+### 示例项目
+
+以下为基于 CodexShell 外壳构建的 OpsNest 示例项目：
+
+![OpsNest 示例](docs/screenshots/zh/06-opsnest-example.png)
 
 ## 免责声明
 

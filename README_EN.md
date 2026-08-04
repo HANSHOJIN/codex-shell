@@ -73,7 +73,13 @@ src-tauri/ Tauri desktop configuration and Rust entry point
 
 ## License
 
-This project is released under the [MIT License](LICENSE).
+This project is released under the [MIT License](https://github.com/HANSHOJIN/codex-shell/blob/master/LICENSE).
+
+### Example project
+
+The following is an OpsNest example project built on the CodexShell UI shell:
+
+![OpsNest example](docs/screenshots/zh/06-opsnest-example.png)
 
 ## Disclaimer
 
