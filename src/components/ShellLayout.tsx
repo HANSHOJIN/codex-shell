@@ -33,7 +33,8 @@ const RIGHT_DEFAULT = 300;
 const BOTTOM_DEFAULT = 210;
 const MIN_SIDE = 190;
 const MIN_BOTTOM = 120;
-const LAYOUT_STORAGE_KEY = "co-shell.layout";
+const LAYOUT_STORAGE_KEY = "codex-shell.layout";
+const LEGACY_LAYOUT_STORAGE_KEY = "co-shell.layout";
 
 type LayoutState = {
   leftOpen: boolean;
@@ -46,7 +47,8 @@ type LayoutState = {
 
 function loadLayoutState(): Partial<LayoutState> {
   try {
-    const raw = window.localStorage.getItem(LAYOUT_STORAGE_KEY);
+    const raw = window.localStorage.getItem(LAYOUT_STORAGE_KEY)
+      ?? window.localStorage.getItem(LEGACY_LAYOUT_STORAGE_KEY);
     return raw ? JSON.parse(raw) as Partial<LayoutState> : {};
   } catch {
     return {};

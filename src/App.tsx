@@ -13,7 +13,9 @@ type AppearancePreferences = {
   uiSize: number;
 };
 
-const APPEARANCE_STORAGE_KEY = "co-shell.appearance";
+const APPEARANCE_STORAGE_KEY = "codex-shell.appearance";
+const LEGACY_APPEARANCE_STORAGE_KEY = "co-shell.appearance";
+const LEGACY_THEME_STORAGE_KEY = "co-shell.theme";
 const DEFAULT_APPEARANCE: AppearancePreferences = {
   theme: "system",
   language: "zh-CN",
@@ -25,7 +27,8 @@ const DEFAULT_APPEARANCE: AppearancePreferences = {
 
 function loadAppearance(): AppearancePreferences {
   try {
-    const saved = window.localStorage.getItem(APPEARANCE_STORAGE_KEY);
+    const saved = window.localStorage.getItem(APPEARANCE_STORAGE_KEY)
+      ?? window.localStorage.getItem(LEGACY_APPEARANCE_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved) as Partial<AppearancePreferences>;
       return {
@@ -38,7 +41,7 @@ function loadAppearance(): AppearancePreferences {
       };
     }
 
-    const legacyTheme = window.localStorage.getItem("co-shell.theme");
+    const legacyTheme = window.localStorage.getItem(LEGACY_THEME_STORAGE_KEY);
     if (legacyTheme === "light" || legacyTheme === "dark" || legacyTheme === "system") {
       return { ...DEFAULT_APPEARANCE, theme: legacyTheme };
     }
@@ -167,7 +170,6 @@ function App() {
     apply();
     try {
       window.localStorage.setItem(APPEARANCE_STORAGE_KEY, JSON.stringify(appearance));
-      window.localStorage.setItem("co-shell.theme", appearance.theme);
     } catch {
       // Applying preferences does not depend on persistence succeeding.
     }

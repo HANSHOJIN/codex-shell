@@ -1,5 +1,9 @@
 node_modules
 dist
 src-tauri/target
+artifacts-*
+*.exe
+*.msi
+*.zip
 *.log
 .DS_Store
