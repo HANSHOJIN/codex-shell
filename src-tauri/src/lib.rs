@@ -20,6 +20,7 @@ fn exit_app(app: tauri::AppHandle) {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![exit_app])
         .setup(|app| {
             let show_item = MenuItem::with_id(app, "show", "显示 CodexShell", true, None::<&str>)?;

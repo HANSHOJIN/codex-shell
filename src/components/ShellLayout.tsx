@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import {
   ArrowLeft,
   ArrowRight,
@@ -124,28 +125,50 @@ function WindowButton({ label, onClick, children, danger = false }: {
 }
 
 function SidebarFooter({ onSettings, language }: { onSettings: () => void; language: "zh-CN" | "en" }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [versionOpen, setVersionOpen] = useState(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const [helpMenuOpen, setHelpMenuOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const isEnglish = language === "en";
 
   return (
     <div className="sidebar-footer">
-      {menuOpen && (
+      {accountMenuOpen && (
         <div className="sidebar-menu" role="menu">
-          <button className="sidebar-menu-item" role="menuitem" onClick={() => { setMenuOpen(false); onSettings(); }}>
+          <button className="sidebar-menu-item" role="menuitem" onClick={() => { setAccountMenuOpen(false); onSettings(); }}>
             <Settings className="sidebar-menu-icon" size={15} />
             <span>{isEnglish ? "Settings" : "设置"}</span>
           </button>
         </div>
       )}
-      {versionOpen && <div className="sidebar-version" role="status">CodexShell 0.1.1</div>}
+      {helpMenuOpen && (
+        <div className="sidebar-menu" role="menu">
+          <button className="sidebar-menu-item" role="menuitem" onClick={() => { setHelpMenuOpen(false); setAboutOpen(true); }}>
+            <CircleHelp className="sidebar-menu-icon" size={15} />
+            <span>{isEnglish ? "About CodexShell" : "关于 CodexShell"}</span>
+          </button>
+        </div>
+      )}
+      {aboutOpen && (
+        <div className="about-backdrop" role="presentation" onMouseDown={() => setAboutOpen(false)}>
+          <section className="about-dialog" role="dialog" aria-modal="true" aria-labelledby="about-title" onMouseDown={(event) => event.stopPropagation()}>
+            <button className="about-close" type="button" aria-label={isEnglish ? "Close" : "关闭"} onClick={() => setAboutOpen(false)}><X size={15} /></button>
+            <div className="about-mark">CS</div>
+            <h2 id="about-title">CodexShell</h2>
+            <p className="about-version">CodexShell 0.1.1</p>
+            <p>UI shell by CodexShell</p>
+            <a href="https://github.com/HANSHOJIN/codex-shell" onClick={(event) => { event.preventDefault(); void openUrl("https://github.com/HANSHOJIN/codex-shell"); }}>github.com/HANSHOJIN/codex-shell</a>
+            <p className="about-license">{isEnglish ? "This framework is open source and free to use. Please keep the CodexShell name and project address when using it, so more people can discover the project. Thank you." : "\u672c\u6846\u67b6\u4e3a\u5f00\u6e90\u514d\u8d39\u3002\u5982\u679c\u4f7f\u7528\uff0c\u8bf7\u4fdd\u7559 CodexShell \u5b57\u6837\u548c\u9879\u76ee\u5730\u5740\uff0c\u4ee5\u65b9\u4fbf\u66f4\u591a\u4eba\u770b\u5230\u9879\u76ee\uff0c\u8c22\u8c22\u3002"}</p>
+            <p className="about-copyright">© 2026 CodexShell</p>
+          </section>
+        </div>
+      )}
       <div className="sidebar-footer-row">
-        <button className="sidebar-account" onClick={() => { setVersionOpen(false); setMenuOpen((value) => !value); }} aria-expanded={menuOpen}>
+        <button className="sidebar-account" onClick={() => { setHelpMenuOpen(false); setAccountMenuOpen((value) => !value); }} aria-expanded={accountMenuOpen}>
           <span className="sidebar-avatar">CS</span>
           <span>YourMenu</span>
-          <ChevronUp className={menuOpen ? "" : "is-down"} size={14} />
+          <ChevronUp className={accountMenuOpen ? "" : "is-down"} size={14} />
         </button>
-        <button className="sidebar-help" title={isEnglish ? "Version information" : "版本信息"} aria-label={isEnglish ? "Version information" : "版本信息"} aria-expanded={versionOpen} onClick={() => { setMenuOpen(false); setVersionOpen((value) => !value); }}>
+        <button className="sidebar-help" title={isEnglish ? "Help" : "帮助"} aria-label={isEnglish ? "Help" : "帮助"} aria-expanded={helpMenuOpen} onClick={() => { setAccountMenuOpen(false); setHelpMenuOpen((value) => !value); }}>
           <CircleHelp size={15} strokeWidth={1.7} />
         </button>
       </div>

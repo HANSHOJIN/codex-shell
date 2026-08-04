@@ -189,8 +189,21 @@ button:focus-visible { outline: 2px solid #6b8afd; outline-offset: 2px; }
 .sidebar-avatar { width: 20px; height: 20px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; background: #7a7a80; color: #f0f0f2; font-size: 8px; font-weight: 600; letter-spacing: -.02em; }
 .sidebar-help { width: 23px; height: 23px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer; }
 .sidebar-help svg { display: block; }
-.sidebar-menu { position: absolute; left: 10px; right: 10px; bottom: 45px; padding: 5px; border: 1px solid var(--elevated-border); border-radius: 8px; background: var(--elevated); box-shadow: 0 10px 28px rgba(0, 0, 0, .22); z-index: 30; }
-.sidebar-version { position: absolute; right: 10px; bottom: 45px; padding: 7px 10px; border: 1px solid var(--elevated-border); border-radius: 8px; background: var(--elevated); color: var(--chrome-text); box-shadow: 0 10px 28px rgba(0, 0, 0, .22); font-size: 11px; line-height: 1; white-space: nowrap; z-index: 30; }
+.sidebar-menu { position: absolute; left: 10px; right: 10px; bottom: 45px; padding: 5px; border: 1px solid var(--elevated-border); border-radius: 8px; background: var(--elevated); box-shadow: 0 10px 28px rgba(0, 0, 0, .22); z-index: 30; animation: menu-rise 140ms ease-out; }
+.about-backdrop { position: fixed; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(0, 0, 0, .38); z-index: 100; animation: menu-fade 140ms ease-out; }
+.about-dialog { position: relative; width: min(320px, calc(100vw - 48px)); padding: 24px 24px 20px; border: 1px solid var(--elevated-border); border-radius: 14px; background: var(--elevated); color: var(--text); box-shadow: 0 18px 50px rgba(0, 0, 0, .35); text-align: center; animation: dialog-pop 160ms cubic-bezier(.2, .8, .2, 1); }
+.about-close { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 26px; height: 26px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer; }
+.about-close:hover { background: var(--control-hover); color: var(--text-strong); }
+.about-mark { width: 44px; height: 44px; display: grid; place-items: center; margin: 0 auto 12px; border-radius: 50%; background: #7a7a80; color: #f0f0f2; font-size: 16px; font-weight: 650; }
+.about-dialog h2 { margin: 0; color: var(--text-strong); font-size: 18px; }
+.about-dialog p { margin: 8px 0 0; font-size: 12px; }
+.about-dialog .about-version { color: var(--muted); margin-top: 4px; }
+.about-dialog a { display: inline-block; margin-top: 10px; color: var(--accent); font-size: 12px; }
+.about-dialog .about-license { margin: 12px auto 0; max-width: 270px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+.about-copyright { color: var(--muted); }
+@keyframes menu-rise { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes menu-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dialog-pop { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .sidebar-menu-item { width: 100%; height: 30px; display: flex; align-items: center; gap: 8px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent; color: var(--text-strong); font-size: 12px; text-align: left; cursor: pointer; }
 .sidebar-menu-item:hover { background: var(--control-hover); }
 .sidebar-menu-icon { width: 15px; color: var(--icon); }

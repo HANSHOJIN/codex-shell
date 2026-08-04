@@ -76,3 +76,38 @@ src-tauri/ Tauri æ¡Œé¢ç«¯é…ç½®ä¸ Rust å…¥å£
 ## è¯´æ˜
 
 CodexShell çš„è¯ç”Ÿæºè‡ªä¸ªäººå¼€å‘å…´è¶£å’Œå®é™…é¡¹ç›®éœ€æ±‚ï¼Œæ˜¯ä¸€ä¸ªç‹¬ç«‹çš„å¼€æºç•Œé¢å¤–å£³é¡¹ç›®ã€‚é¡¹ç›®åç§°ã€å›¾æ ‡å’Œå®ç°ä»£ç å‡ä¸ä»£è¡¨ä¸ OpenAIã€ChatGPT æˆ– Codex å­˜åœ¨å®˜æ–¹å…³è”æˆ–æˆæƒå…³ç³»ã€‚
+# CodexShell
+
+## ç•Œé¢æˆªå›¾
+
+### æ·±è‰²åŸºç¡€å¸ƒå±€
+![åŸºç¡€å¸ƒå±€](docs/screenshots/zh/01-layout-dark.png)
+
+### å³ä¾§æ–‡ä»¶é¢æ¿
+![å³ä¾§æ–‡ä»¶é¢æ¿](docs/screenshots/zh/02-right-files-dark.png)
+
+### åº•éƒ¨é¢æ¿
+![åº•éƒ¨é¢æ¿](docs/screenshots/zh/03-bottom-panel-dark.png)
+
+### å¤–è§‚è®¾ç½®
+![å¤–è§‚è®¾ç½®](docs/screenshots/zh/04-appearance-dark.png)
+
+### æµ…è‰²ä¸»é¢˜
+![æµ…è‰²ä¸»é¢˜](docs/screenshots/zh/05-light-theme.png)
+
+## ½çÃæ½ØÍ¼
+
+### ÉîÉ«»ù´¡²¼¾Ö
+![»ù´¡²¼¾Ö](docs/screenshots/zh/01-layout-dark.png)
+
+### ÓÒ²àÎÄ¼şÃæ°å
+![ÓÒ²àÎÄ¼şÃæ°å](docs/screenshots/zh/02-right-files-dark.png)
+
+### µ×²¿Ãæ°å
+![µ×²¿Ãæ°å](docs/screenshots/zh/03-bottom-panel-dark.png)
+
+### Íâ¹ÛÉèÖÃ
+![Íâ¹ÛÉèÖÃ](docs/screenshots/zh/04-appearance-dark.png)
+
+### Ç³É«Ö÷Ìâ
+![Ç³É«Ö÷Ìâ](docs/screenshots/zh/05-light-theme.png)
