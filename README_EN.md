@@ -19,6 +19,23 @@ Project repository: [github.com/HANSHOJIN/codex-shell](https://github.com/HANSHO
 - Reduced-motion support
 - Built with Tauri, React, and TypeScript
 
+## Screenshots
+
+### Appearance settings
+![Appearance settings](docs/screenshots/en/01-appearance-light.png)
+
+### Light layout with files panel
+![Light layout with files panel](docs/screenshots/en/02-layout-light.png)
+
+### Light layout with pinned submenu
+![Light layout with pinned submenu](docs/screenshots/en/03-layout-light-pinned.png)
+
+### Dark submenu layout
+![Dark submenu layout](docs/screenshots/en/04-submenu-dark.png)
+
+### Dark submenu layout with files panel
+![Dark submenu layout with files panel](docs/screenshots/en/05-submenu-files-dark.png)
+
 ## Project Positioning
 
 CodexShell is a desktop shell intended for further development. It does not include a specific end-user application. A packaged EXE is provided as a concept demonstration, and developers can build their own application on top of it.
@@ -86,21 +103,3 @@ The following is an OpsNest example project built on the CodexShell UI shell:
 CodexShell was created as an independent open-source project based on personal interest and practical project needs. Its name, icon, and implementation are not affiliated with or authorized by OpenAI, ChatGPT, or Codex.
 
 > If you reuse or build on this project, please keep the attribution `UI shell by CodexShell` and the project address: https://github.com/HANSHOJIN/codex-shell
-# CodexShell
-
-## Screenshots
-
-### Appearance settings
-![Appearance settings](docs/screenshots/en/01-appearance-light.png)
-
-### Light layout with files panel
-![Light layout with files panel](docs/screenshots/en/02-layout-light.png)
-
-### Light layout with pinned submenu
-![Light layout with pinned submenu](docs/screenshots/en/03-layout-light-pinned.png)
-
-### Dark submenu layout
-![Dark submenu layout](docs/screenshots/en/04-submenu-dark.png)
-
-### Dark submenu layout with files panel
-![Dark submenu layout with files panel](docs/screenshots/en/05-submenu-files-dark.png)
