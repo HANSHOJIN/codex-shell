@@ -6,6 +6,8 @@ CodexShell provides the window structure, panel layout, and basic interactions w
 
 Project repository: [github.com/HANSHOJIN/codex-shell](https://github.com/HANSHOJIN/codex-shell)
 
+简体中文版本：[README.md](README.md)
+
 ## Features
 
 - Codex-style desktop window and top navigation

@@ -6,6 +6,8 @@ CodexShell 是一个参考 Codex 风格工作台交互范式实现的 Tauri + Re
 
 项目仓库：[github.com/HANSHOJIN/codex-shell](https://github.com/HANSHOJIN/codex-shell)
 
+English version: [README_EN.md](README_EN.md)
+
 ## 功能
 
 - Codex 风格桌面窗口与顶部占位菜单
@@ -50,8 +52,6 @@ codex-shell 的核心价值不在于布局外壳，而在于后续面向具体�
 ## 已实现 / 未实现
 
 已实现：四栏布局、面板拖拽、阈值吸附、平滑动画、主题设置、语言切换、关于窗口、系统托盘和占位菜单交互。
-
-未实现：AI、SSH、服务器管理、文件业务、终端业务及任何 OpsNest 业务功能。
 
 ## 本地运行
 
