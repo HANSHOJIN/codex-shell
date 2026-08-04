@@ -1,8 +1,9 @@
 import React from "react";
-import ShellLayout from "./components/ShellLayout";
+import ShellLayout, { ShellNavigation } from "./components/ShellLayout";
 
 type Theme = "system" | "light" | "dark";
 type Language = "zh-CN" | "en";
+type CloseAction = "tray" | "exit";
 
 type AppearancePreferences = {
   theme: Theme;
@@ -11,6 +12,7 @@ type AppearancePreferences = {
   translucentSidebar: boolean;
   reduceMotion: boolean;
   uiSize: number;
+  closeAction: CloseAction;
 };
 
 const APPEARANCE_STORAGE_KEY = "codex-shell.appearance";
@@ -23,6 +25,7 @@ const DEFAULT_APPEARANCE: AppearancePreferences = {
   translucentSidebar: false,
   reduceMotion: false,
   uiSize: 14,
+  closeAction: "tray",
 };
 
 function loadAppearance(): AppearancePreferences {
@@ -38,6 +41,7 @@ function loadAppearance(): AppearancePreferences {
         translucentSidebar: parsed.translucentSidebar === true,
         reduceMotion: parsed.reduceMotion === true,
         uiSize: parsed.uiSize === 13 || parsed.uiSize === 15 ? parsed.uiSize : 14,
+        closeAction: parsed.closeAction === "exit" ? "exit" : "tray",
       };
     }
 
@@ -109,7 +113,16 @@ function AppearanceSettings({
         >
           <select aria-label={isEnglish ? "Language" : "语言"} value={value.language} onChange={(event) => update("language", event.target.value as Language)}>
             <option value="zh-CN">简体中文</option>
-            <option value="en">English</option>
+          <option value="en">English</option>
+        </select>
+      </SettingRow>
+        <SettingRow
+          label={isEnglish ? "Close button action" : "关闭按钮动作"}
+          description={isEnglish ? "Choose whether closing hides the app in the tray or exits" : "选择关闭窗口时隐藏到系统托盘或直接退出"}
+        >
+          <select aria-label={isEnglish ? "Close button action" : "关闭按钮动作"} value={value.closeAction} onChange={(event) => update("closeAction", event.target.value as CloseAction)}>
+            <option value="tray">{isEnglish ? "Minimize to tray" : "最小化到托盘"}</option>
+            <option value="exit">{isEnglish ? "Exit application" : "直接退出"}</option>
           </select>
         </SettingRow>
         <SettingRow
@@ -155,6 +168,7 @@ function SettingRow({ label, description, children }: { label: string; descripti
 
 function App() {
   const [appearance, setAppearance] = React.useState<AppearancePreferences>(loadAppearance);
+  const [selectedMenu, setSelectedMenu] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -185,9 +199,10 @@ function App() {
       appName="YourApp"
       language={appearance.language}
       showMenuBar={appearance.showMenuBar}
+      closeAction={appearance.closeAction}
       settings={<AppearanceSettings value={appearance} onChange={setAppearance} />}
-      left={<EmptySlot label={isEnglish ? "Sidebar content placeholder" : "左侧栏内容占位"} />}
-      main={<EmptySlot label={isEnglish ? "YourApp main area" : "YourApp 主区域"} />}
+      left={<ShellNavigation language={appearance.language} selected={selectedMenu} onSelect={setSelectedMenu} />}
+      main={selectedMenu ? <div className="menu-selection-placeholder">{selectedMenu.startsWith("menu") ? (isEnglish ? `Menu ${selectedMenu.slice(-1)}` : `\u83dc\u5355${selectedMenu.slice(-1)}`) : (isEnglish ? `Submenu ${selectedMenu.slice(-1)}` : `\u5b50\u83dc\u5355${selectedMenu.slice(-1)}`)}</div> : <EmptySlot label={isEnglish ? "YourApp main area" : "YourApp main area"} />}
       right={<FilesPlaceholder language={appearance.language} />}
       bottom={<EmptySlot label={isEnglish ? "Bottom panel content placeholder" : "底部面板内容占位"} />}
     />

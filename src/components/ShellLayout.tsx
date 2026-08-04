@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { invoke } from "@tauri-apps/api/core";
 import {
   ArrowLeft,
+  ArrowRight,
   ChevronUp,
   CircleHelp,
+  ChevronDown,
+  Globe2,
+  MessageSquare,
   Minus,
   PanelBottom,
   PanelLeft,
@@ -21,12 +26,45 @@ export type ShellLayoutProps = {
   appName?: string;
   language?: "zh-CN" | "en";
   showMenuBar?: boolean;
+  closeAction?: "tray" | "exit";
   left: ReactNode;
   main: ReactNode;
   right: ReactNode;
   bottom: ReactNode;
   settings?: ReactNode;
 };
+
+export function ShellNavigation({ language = "zh-CN", selected, onSelect }: { language?: "zh-CN" | "en"; selected?: string | null; onSelect?: (id: string) => void }) {
+  const isEnglish = language === "en";
+  const [openGroups, setOpenGroups] = useState({ first: true, second: false });
+  const toggle = (group: "first" | "second") => setOpenGroups((value) => ({ ...value, [group]: !value[group] }));
+  const mainItems = isEnglish ? ["Menu 1", "Menu 2"] : ["\u83dc\u53551", "\u83dc\u53552"];
+  const submenuItems = isEnglish ? ["Submenu 1", "Submenu 2"] : ["\u5b50\u83dc\u53551", "\u5b50\u83dc\u53552"];
+
+  return (
+    <nav className="left-navigation" aria-label={isEnglish ? "Shell navigation" : "壳导航"}>
+      <button className={`nav-item ${selected === "menu1" ? "is-selected" : ""}`} type="button" onClick={() => onSelect?.("menu1")}><MessageSquare size={15} /><span>{mainItems[0]}</span></button>
+      <button className={`nav-item ${selected === "menu2" ? "is-selected" : ""}`} type="button" onClick={() => onSelect?.("menu2")}><Globe2 size={15} /><span>{mainItems[1]}</span></button>
+      <NavGroup label={isEnglish ? "Pinned" : "\u7f6e\u9876"} open={openGroups.first} onToggle={() => toggle("first")} items={submenuItems} onSelect={onSelect} groupId="sub1" selected={selected} />
+      <NavGroup label={isEnglish ? "Projects" : "\u9879\u76ee"} open={openGroups.second} onToggle={() => toggle("second")} items={submenuItems} onSelect={onSelect} groupId="sub2" selected={selected} />
+    </nav>
+  );
+}
+
+function NavGroup({ label, open, onToggle, items, onSelect, groupId, selected }: { label: string; open: boolean; onToggle: () => void; items: string[]; onSelect?: (id: string) => void; groupId: string; selected?: string | null }) {
+  return (
+    <div className={`nav-group ${open ? "is-open" : ""}`}>
+      <button className="nav-group-button" type="button" onClick={onToggle} aria-expanded={open}>
+        <span>{label}</span><ChevronDown className="nav-group-chevron" size={13} />
+      </button>
+      <div className="nav-group-content" aria-hidden={!open}>
+        <div className="nav-group-content-inner">
+          {items.map((item, index) => { const id = `${groupId}-${index + 1}`; return <button className={`nav-subitem ${selected === id ? "is-selected" : ""}`} type="button" key={id} onClick={() => onSelect?.(id)}><span>{item}</span></button>; })}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const LEFT_DEFAULT = 260;
 const RIGHT_DEFAULT = 300;
@@ -100,7 +138,7 @@ function SidebarFooter({ onSettings, language }: { onSettings: () => void; langu
           </button>
         </div>
       )}
-      {versionOpen && <div className="sidebar-version" role="status">CodexShell 0.1</div>}
+      {versionOpen && <div className="sidebar-version" role="status">CodexShell 0.1.1</div>}
       <div className="sidebar-footer-row">
         <button className="sidebar-account" onClick={() => { setVersionOpen(false); setMenuOpen((value) => !value); }} aria-expanded={menuOpen}>
           <span className="sidebar-avatar">CS</span>
@@ -132,7 +170,7 @@ function SettingsSidebar({ onBack, language }: { onBack: () => void; language: "
   );
 }
 
-function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh-CN", showMenuBar = true, left, main, right, bottom, settings }: ShellLayoutProps) {
+function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh-CN", showMenuBar = true, closeAction = "tray", left, main, right, bottom, settings }: ShellLayoutProps) {
   const isEnglish = language === "en";
   const initial = useRef<Partial<LayoutState> | null>(null);
   if (initial.current === null) initial.current = loadLayoutState();
@@ -263,7 +301,8 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
       <header className="window-chrome" data-tauri-drag-region>
         <div className="window-chrome-left" data-tauri-drag-region>
           <WindowButton label={isEnglish ? "Toggle sidebar" : "切换左侧栏"} onClick={() => setLeftOpen((value) => !value)}><PanelLeft size={15} /></WindowButton>
-          <span className="window-brand" data-tauri-drag-region>{title}</span>
+          <button className="window-button window-history" type="button" aria-label={isEnglish ? "Back" : "后退"} aria-disabled="true"><ArrowLeft size={15} /></button>
+          <button className="window-button window-history" type="button" aria-label={isEnglish ? "Forward" : "前进"} aria-disabled="true"><ArrowRight size={15} /></button>
           {showMenuBar && (
             <nav className="window-menu" aria-label={isEnglish ? "Application menu placeholders" : "应用菜单占位符"}>
               {(isEnglish ? ["File", "Edit", "View", "Help"] : ["文件", "编辑", "视图", "帮助"]).map((item) => (
@@ -275,7 +314,10 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
         <div className="window-chrome-right" data-tauri-drag-region="false">
           <WindowButton label={isEnglish ? "Minimize" : "最小化"} onClick={() => void getCurrentWindow().minimize()}><Minus size={14} /></WindowButton>
           <WindowButton label={isEnglish ? "Maximize" : "最大化"} onClick={() => void getCurrentWindow().toggleMaximize()}><Square size={12} /></WindowButton>
-          <WindowButton label={isEnglish ? "Close" : "关闭"} danger onClick={() => void getCurrentWindow().close()}><X size={14} /></WindowButton>
+          <WindowButton label={isEnglish ? "Close" : "关闭"} danger onClick={() => {
+            if (closeAction === "exit") void invoke("exit_app");
+            else void getCurrentWindow().hide();
+          }}><X size={14} /></WindowButton>
         </div>
       </header>
       <div ref={shellRef} className={`app-shell ${dragging ? `is-dragging drag-${dragging}` : ""}`}>
