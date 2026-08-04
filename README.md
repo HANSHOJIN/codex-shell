@@ -1,87 +1,39 @@
 # CodexShell
 
-一套仿 Codex（现已合并到 ChatGPT）交互布局的桌面外壳程序，用于开发适合该布局的任意软件。
+CodexShell 是一个参考 Codex 风格工作台交互范式实现的 Tauri + React + TypeScript 桌面外壳。
 
-CodexShell 只提供窗口结构、面板布局和基础交互，不绑定具体业务。开发者可以在此基础上自由放置聊天、编辑器、终端、文件管理、数据面板或其他应用内容，快速构建具有现代 AI 工作台体验的桌面软件。
+项目只提供窗口结构、四栏布局、面板交互和视觉占位，不绑定具体业务。开发者可以在此基础上接入自己的聊天、编辑器、终端、文件管理或数据面板功能。
 
-## 特性
+项目仓库：[github.com/HANSHOJIN/codex-shell](https://github.com/HANSHOJIN/codex-shell)
 
-- Codex 风格的桌面窗口与顶部导航
-- 左侧栏、中间主区域、右侧栏、底部面板四区布局
-- 左侧栏、右侧栏和底部面板可独立显示、隐藏与调整尺寸
-- 拖拽调整面板尺寸，并在收缩到阈值时平滑吸附关闭
-- 面板之间保持独立，便于按应用需求组合界面
-- 支持浅色、深色和跟随系统外观
-- 支持减少动态效果，照顾不同用户的使用偏好
-- 使用 Tauri、React 和 TypeScript 构建
+## 功能
+
+- Codex 风格桌面窗口与顶部占位菜单
+- 左栏、主区域、右栏、底部面板四栏布局
+- 左栏、右栏和底部面板独立显示、隐藏与拖拽调整
+- 拖拽到阈值后平滑吸附收起，并支持恢复
+- 面板展开、收起和切换动画
+- 浅色、深色、跟随系统和半透明侧边栏设置
+- 简体中文 / English 界面
+- 最小化、最大化、窗口拖动和系统托盘行为
+- YourApp、YourMenu、YourTIPS 等占位命名
 
 ## 项目定位
 
-CodexShell 是一套可二次开发的桌面外壳，本身不绑定具体业务。项目提供打包的 EXE 作为概念演示，开发者可以在此基础上构建自己的应用。
+本项目 codex-shell 参考经典 OpenAI Codex Playground 交互范式进行实现。
 
-本项目参考经典 Codex Playground 交互范式。侧边可调面板、输入区域、流式输出和快捷操作等设计，已经成为代码类 AI 工作台中常见的信息架构。
+老 OpenAI Codex Playground 建立了代码类 AI 工作台经过长期验证的成熟交互模型：
 
-本项目借鉴的是通用的信息架构与交互逻辑，而不是复制某个产品的具体视觉资源。类似「文件树 + 编辑区 + 底部面板」的布局，在不同类型的桌面软件中都十分常见。
+**侧边可调参数面板 + Prompt 输入区域 + 流式代码输出 + 代码快捷操作**。
 
-## 已实现
+当前市面上绝大多数代码 AI 工具均沿用这套交互思路。像素照搬视觉样式属于界面抄袭；借鉴成熟的信息架构与交互逻辑，属于吸收行业最佳实践。
 
-- 左侧栏、主区域、右侧栏和底部面板四区布局
-- 左栏、右栏、底栏独立打开与关闭
-- 左右栏拖拽调宽、底栏拖拽调高及阈值吸附收起
-- 面板展开、收起和恢复动画
-- 浅色、深色、跟随系统主题及半透明侧边栏设置持久化
-- 窗口最小化、最大化、尺寸变化及关闭后隐藏到系统托盘
-- `YourApp`、`YourMenu`、`YourTIPS` 等壳项目占位命名
-
-
-
-## 当前版本
-
-**0.1** — 首个公开版本，提供四区桌面布局和基础面板交互能力。
-
-当前版本专注于外壳本身，暂不提供特定的 AI、SSH、服务器管理、文件管理或其他业务功能。
-
-## 本地运行
-
-```powershell
-npm install
-npm run dev
-```
-
-启动 Tauri 桌面窗口：
-
-```powershell
-npm run tauri dev
-```
-
-## 检查与构建
-
-```powershell
-npm run check
-npm run build
-npm run tauri build
-```
-
-## 目录说明
-
-```text
-src/       React 界面与布局代码
-src-tauri/ Tauri 桌面端配置与 Rust 入口
-```
-
-## 开源协议
-
-本项目采用 [MIT License](LICENSE) 开源。
-
-## 说明
-
-CodexShell 的诞生源自个人开发兴趣和实际项目需求，是一个独立的开源界面外壳项目。项目名称、图标和实现代码均不代表与 OpenAI、ChatGPT 或 Codex 存在官方关联或授权关系。
-# CodexShell
+codex-shell 的核心价值不在于布局外壳，而在于后续面向具体场景的扩展能力与独有功能。
 
 ## 界面截图
 
 ### 深色基础布局
-![基础布局](docs/screenshots/zh/01-layout-dark.png)
+![深色基础布局](docs/screenshots/zh/01-layout-dark.png)
 
 ### 右侧文件面板
 ![右侧文件面板](docs/screenshots/zh/02-right-files-dark.png)
@@ -95,19 +47,37 @@ CodexShell 的诞生源自个人开发兴趣和实际项目需求，是一个独
 ### 浅色主题
 ![浅色主题](docs/screenshots/zh/05-light-theme.png)
 
-## �����ͼ
+## 已实现 / 未实现
 
-### ��ɫ��������
-![��������](docs/screenshots/zh/01-layout-dark.png)
+已实现：四栏布局、面板拖拽、阈值吸附、平滑动画、主题设置、语言切换、关于窗口、系统托盘和占位菜单交互。
 
-### �Ҳ��ļ����
-![�Ҳ��ļ����](docs/screenshots/zh/02-right-files-dark.png)
+未实现：AI、SSH、服务器管理、文件业务、终端业务及任何 OpsNest 业务功能。
 
-### �ײ����
-![�ײ����](docs/screenshots/zh/03-bottom-panel-dark.png)
+## 本地运行
 
-### �������
-![�������](docs/screenshots/zh/04-appearance-dark.png)
+```powershell
+npm install
+npm run dev
+```
 
-### ǳɫ����
-![ǳɫ����](docs/screenshots/zh/05-light-theme.png)
+运行 Tauri 桌面窗口：
+
+```powershell
+npm run tauri dev
+```
+
+检查与构建：
+
+```powershell
+npm run check
+npm run build
+npm run tauri build
+```
+
+## 开源许可
+
+本项目采用 [MIT License](LICENSE) 开源。使用本框架时，请保留 CodexShell 字样和项目地址。
+
+## 免责声明
+
+CodexShell 是独立开源项目，名称、图标和实现不代表与 OpenAI、ChatGPT 或 Codex 存在官方关联或授权关系。
