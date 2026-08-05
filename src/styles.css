@@ -352,7 +352,7 @@ button:focus-visible { outline: 2px solid #6b8afd; outline-offset: 2px; }
   grid-row: 3;
   min-height: 0;
   overflow: hidden;
-  border-top: 1px solid var(--line);
+  border-top: 0;
   background: var(--bottom);
   transition: opacity 180ms ease;
 }
@@ -379,7 +379,7 @@ button:focus-visible { outline: 2px solid #6b8afd; outline-offset: 2px; }
 }
 
 .resize-handle { position: absolute; z-index: 20; touch-action: none; }
-.resize-handle::after { content: ""; position: absolute; background: transparent; transition: background 150ms ease; }
+.resize-handle::after { content: ""; position: absolute; background: var(--line); transition: background 150ms ease; }
 .resize-handle:hover::after, .is-dragging .resize-handle::after { background: #6d6d75; }
 .vertical { top: 0; bottom: 0; width: 7px; cursor: col-resize; }
 .vertical::after { top: 0; bottom: 0; left: 3px; width: 1px; }
