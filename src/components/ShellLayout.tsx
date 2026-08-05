@@ -201,6 +201,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
   const [leftOpen, setLeftOpen] = useState(saved.leftOpen ?? true);
   const [rightOpen, setRightOpen] = useState(saved.rightOpen ?? true);
   const [bottomOpen, setBottomOpen] = useState(saved.bottomOpen ?? true);
+  const [bottomFullscreen, setBottomFullscreen] = useState(false);
   const [leftWidth, setLeftWidth] = useState(saved.leftWidth ?? LEFT_DEFAULT);
   const [rightWidth, setRightWidth] = useState(saved.rightWidth ?? RIGHT_DEFAULT);
   const [bottomHeight, setBottomHeight] = useState(saved.bottomHeight ?? BOTTOM_DEFAULT);
@@ -230,7 +231,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
       }
 
       if (bottomOpen) {
-        setBottomHeight((value) => Math.min(value, Math.max(MIN_BOTTOM, bounds.height - 170)));
+        setBottomHeight((value) => Math.min(value, Math.max(MIN_BOTTOM, bounds.height - 44)));
       }
     };
 
@@ -262,10 +263,10 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
       else if (event.key === "End") { setRightOpen(true); setRightWidth(440); }
       else handled = false;
     } else {
-      if (event.key === "ArrowUp") setBottomHeight((value) => clamp(value + step, MIN_BOTTOM, 600));
-      else if (event.key === "ArrowDown") setBottomHeight((value) => clamp(value - step, MIN_BOTTOM, 600));
-      else if (event.key === "Home") setBottomOpen(false);
-      else if (event.key === "End") { setBottomOpen(true); setBottomHeight(600); }
+      if (event.key === "ArrowUp") setBottomHeight((value) => clamp(value + step, MIN_BOTTOM, 1200));
+      else if (event.key === "ArrowDown") { setBottomFullscreen(false); setBottomHeight((value) => clamp(value - step, MIN_BOTTOM, 1200)); }
+      else if (event.key === "Home") { setBottomFullscreen(false); setBottomOpen(false); }
+      else if (event.key === "End") { setBottomOpen(true); setBottomFullscreen(true); setBottomHeight(1200); }
       else handled = false;
     }
     if (handled) event.preventDefault();
@@ -289,7 +290,12 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
       if (dragging === "bottom") {
         const next = bounds.bottom - event.clientY;
         if (next < MIN_BOTTOM * 0.62) { setDragging(null); setBottomOpen(false); }
-        else { setBottomOpen(true); setBottomHeight(clamp(next, MIN_BOTTOM, Math.max(180, bounds.height * 0.6))); }
+        else {
+          const maxBottom = Math.max(MIN_BOTTOM, bounds.height - 44);
+          setBottomOpen(true);
+          setBottomFullscreen(next >= maxBottom - 10);
+          setBottomHeight(clamp(next, MIN_BOTTOM, maxBottom));
+        }
       }
     };
     const stop = () => setDragging(null);
@@ -363,14 +369,14 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
             {!leftOpen && <IconButton label={isEnglish ? "Show sidebar" : "展开左侧栏"} onClick={() => setLeftOpen(true)} className="left-restore"><PanelLeft size={15} /></IconButton>}
             <span className="center-label">{isEnglish ? "Main area" : "主区域"}</span>
             <div className="toolbar-actions">
-              <IconButton label={isEnglish ? (bottomOpen ? "Hide bottom panel" : "Show bottom panel") : (bottomOpen ? "收起底部面板" : "展开底部面板")} onClick={() => setBottomOpen((value) => !value)} className={bottomOpen ? "is-active" : ""}><PanelBottom size={15} /></IconButton>
+              <IconButton label={isEnglish ? (bottomOpen ? "Hide bottom panel" : "Show bottom panel") : (bottomOpen ? "收起底部面板" : "展开底部面板")} onClick={() => { setBottomFullscreen(false); setBottomOpen((value) => !value); }} className={bottomOpen ? "is-active" : ""}><PanelBottom size={15} /></IconButton>
               <IconButton label={isEnglish ? (rightOpen ? "Hide files panel" : "Show files panel") : (rightOpen ? "收起文件栏" : "展开文件栏")} onClick={() => setRightOpen((value) => !value)} className={rightOpen ? "is-active" : ""}><PanelRight size={15} /></IconButton>
             </div>
           </div>
           <section className="main-placeholder">{settingsOpen && settings ? settings : main}</section>
           {bottomOpen && <div className="resize-handle horizontal bottom-handle" role="separator" tabIndex={0} aria-orientation="horizontal" aria-label="调整底部面板高度" onPointerDown={(e) => startDrag("bottom", e)} onKeyDown={(e) => resizeWithKeyboard("bottom", e)} />}
           <section className={`bottom-panel ${bottomOpen ? "is-open" : "is-closed"}`} aria-hidden={!bottomOpen} inert={!bottomOpen}>
-            <div className="bottom-toolbar"><span>{title}</span></div>
+            <div className="bottom-toolbar"><span>{title}</span>{bottomFullscreen && <IconButton label={isEnglish ? "Restore bottom panel" : "恢复底部面板"} onClick={() => { setBottomFullscreen(false); setBottomHeight(BOTTOM_DEFAULT); }} className="bottom-collapse-button"><PanelBottom size={15} /></IconButton>}</div>
             {bottom}
           </section>
         </main>

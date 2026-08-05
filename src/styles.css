@@ -357,6 +357,7 @@ button:focus-visible { outline: 2px solid #6b8afd; outline-offset: 2px; }
   transition: opacity 180ms ease;
 }
 .bottom-panel > .empty-slot { height: calc(100% - 48px); }
+.bottom-collapse-button svg { transform: rotate(180deg); }
 
 .bottom-restore {
   position: absolute;
