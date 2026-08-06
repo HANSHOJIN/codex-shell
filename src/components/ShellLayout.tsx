@@ -155,7 +155,7 @@ function SidebarFooter({ onSettings, language }: { onSettings: () => void; langu
             <button className="about-close" type="button" aria-label={isEnglish ? "Close" : "关闭"} onClick={() => setAboutOpen(false)}><X size={15} /></button>
             <div className="about-mark">CS</div>
             <h2 id="about-title">CodexShell</h2>
-            <p className="about-version">CodexShell 0.1.2</p>
+            <p className="about-version">CodexShell 0.1.3</p>
             <p>UI shell by CodexShell</p>
             <a href="https://github.com/HANSHOJIN/codex-shell" onClick={(event) => { event.preventDefault(); void openUrl("https://github.com/HANSHOJIN/codex-shell"); }}>github.com/HANSHOJIN/codex-shell</a>
             <p className="about-license">{isEnglish ? "This framework is open source and free to use. Please keep the CodexShell name and project address when using it, so more people can discover the project. Thank you." : "\u672c\u6846\u67b6\u4e3a\u5f00\u6e90\u514d\u8d39\u3002\u5982\u679c\u4f7f\u7528\uff0c\u8bf7\u4fdd\u7559 CodexShell \u5b57\u6837\u548c\u9879\u76ee\u5730\u5740\uff0c\u4ee5\u65b9\u4fbf\u66f4\u591a\u4eba\u770b\u5230\u9879\u76ee\uff0c\u8c22\u8c22\u3002"}</p>
