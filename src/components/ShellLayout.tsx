@@ -7,6 +7,7 @@ import {
   ArrowRight,
   ChevronUp,
   CircleHelp,
+  Copy,
   ChevronDown,
   Globe2,
   MessageSquare,
@@ -205,9 +206,30 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
   const [leftWidth, setLeftWidth] = useState(saved.leftWidth ?? LEFT_DEFAULT);
   const [rightWidth, setRightWidth] = useState(saved.rightWidth ?? RIGHT_DEFAULT);
   const [bottomHeight, setBottomHeight] = useState(saved.bottomHeight ?? BOTTOM_DEFAULT);
+  const [isMaximized, setIsMaximized] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [dragging, setDragging] = useState<DragKind | null>(null);
   const shellRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const windowHandle = getCurrentWindow();
+    let disposed = false;
+    const syncMaximizedState = async () => {
+      const maximized = await windowHandle.isMaximized();
+      if (!disposed) setIsMaximized(maximized);
+    };
+
+    void syncMaximizedState();
+    let unlisten: (() => void) | undefined;
+    void windowHandle.onResized(() => { void syncMaximizedState(); }).then((cleanup) => {
+      if (disposed) cleanup();
+      else unlisten = cleanup;
+    });
+    return () => {
+      disposed = true;
+      unlisten?.();
+    };
+  }, []);
 
   useEffect(() => {
     const shell = shellRef.current;
@@ -343,7 +365,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
         </div>
         <div className="window-chrome-right" data-tauri-drag-region="false">
           <WindowButton label={isEnglish ? "Minimize" : "最小化"} onClick={() => void getCurrentWindow().minimize()}><Minus size={14} /></WindowButton>
-          <WindowButton label={isEnglish ? "Maximize" : "最大化"} onClick={() => void getCurrentWindow().toggleMaximize()}><Square size={12} /></WindowButton>
+          <WindowButton label={isMaximized ? (isEnglish ? "Restore" : "恢复") : (isEnglish ? "Maximize" : "最大化")} onClick={() => void getCurrentWindow().toggleMaximize()}>{isMaximized ? <Copy size={12} /> : <Square size={12} />}</WindowButton>
           <WindowButton label={isEnglish ? "Close" : "关闭"} danger onClick={() => {
             if (closeAction === "exit") void invoke("exit_app");
             else void getCurrentWindow().hide();
