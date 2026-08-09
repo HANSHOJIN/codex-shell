@@ -278,6 +278,18 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
     return Math.max(MIN_SIDE, shellWidth - leftSpace - 240);
   }, [leftOpen, leftWidth]);
 
+  const toggleBottomFullscreen = useCallback(() => {
+    if (bottomFullscreen) {
+      setBottomFullscreen(false);
+      setBottomHeight(BOTTOM_DEFAULT);
+      return;
+    }
+    const shellHeight = shellRef.current?.getBoundingClientRect().height ?? 600;
+    setBottomOpen(true);
+    setBottomFullscreen(true);
+    setBottomHeight(Math.max(MIN_BOTTOM, shellHeight - 44));
+  }, [bottomFullscreen]);
+
   const resizeWithKeyboard = useCallback((kind: DragKind, event: React.KeyboardEvent) => {
     const step = event.shiftKey ? 32 : 8;
     let handled = true;
@@ -408,7 +420,13 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
           <section className="main-placeholder">{settingsOpen && settings ? settings : main}</section>
           {bottomOpen && <div className="resize-handle horizontal bottom-handle" role="separator" tabIndex={0} aria-orientation="horizontal" aria-label="调整底部面板高度" onPointerDown={(e) => startDrag("bottom", e)} onKeyDown={(e) => resizeWithKeyboard("bottom", e)} />}
           <section className={`bottom-panel ${bottomOpen ? "is-open" : "is-closed"}`} aria-hidden={!bottomOpen} inert={!bottomOpen}>
-            <div className="bottom-toolbar"><span>{title}</span>{bottomFullscreen && <IconButton label={isEnglish ? "Restore bottom panel" : "恢复底部面板"} onClick={() => { setBottomFullscreen(false); setBottomHeight(BOTTOM_DEFAULT); }} className="bottom-collapse-button"><PanelBottom size={15} /></IconButton>}</div>
+            <div className="bottom-toolbar">
+              <span>{title}</span>
+              <div className="toolbar-actions">
+                <IconButton label={bottomFullscreen ? (isEnglish ? "Restore bottom panel" : "还原底部面板") : (isEnglish ? "Maximize bottom panel" : "底部面板全屏")} onClick={toggleBottomFullscreen} className={bottomFullscreen ? "is-active" : ""}>{bottomFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}</IconButton>
+                <IconButton label={isEnglish ? "Hide bottom panel" : "关闭底部面板"} onClick={() => { setBottomFullscreen(false); setBottomOpen(false); }}><PanelBottom size={15} /></IconButton>
+              </div>
+            </div>
             {bottom}
           </section>
         </main>
