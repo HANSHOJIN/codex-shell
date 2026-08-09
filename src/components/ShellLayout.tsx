@@ -204,6 +204,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
   const [leftOpen, setLeftOpen] = useState(saved.leftOpen ?? true);
   const [rightOpen, setRightOpen] = useState(saved.rightOpen ?? true);
   const [rightFullscreen, setRightFullscreen] = useState(false);
+  const [rightFullscreenBottomOpen, setRightFullscreenBottomOpen] = useState(false);
   const [bottomOpen, setBottomOpen] = useState(saved.bottomOpen ?? true);
   const [bottomFullscreen, setBottomFullscreen] = useState(false);
   const [leftWidth, setLeftWidth] = useState(saved.leftWidth ?? LEFT_DEFAULT);
@@ -414,7 +415,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
             <span className="center-label">{isEnglish ? "Main area" : "主区域"}</span>
             <div className="toolbar-actions">
               <IconButton label={isEnglish ? (bottomOpen ? "Hide bottom panel" : "Show bottom panel") : (bottomOpen ? "收起底部面板" : "展开底部面板")} onClick={() => { setBottomFullscreen(false); setBottomOpen((value) => !value); }} className={bottomOpen ? "is-active" : ""}><PanelBottom size={15} /></IconButton>
-              <IconButton label={isEnglish ? (rightOpen ? "Hide files panel" : "Show files panel") : (rightOpen ? "收起文件栏" : "展开文件栏")} onClick={() => { setRightFullscreen(false); setRightOpen((value) => !value); }} className={rightOpen ? "is-active" : ""}><PanelRight size={15} /></IconButton>
+              <IconButton label={isEnglish ? (rightOpen ? "Hide files panel" : "Show files panel") : (rightOpen ? "收起文件栏" : "展开文件栏")} onClick={() => { setRightFullscreen(false); setRightFullscreenBottomOpen(false); setRightOpen((value) => !value); }} className={rightOpen ? "is-active" : ""}><PanelRight size={15} /></IconButton>
             </div>
           </div>
           <section className="main-placeholder">{settingsOpen && settings ? settings : main}</section>
@@ -436,12 +437,24 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
           <div className="panel-toolbar right-toolbar">
             <span>{isEnglish ? "Files" : "文件"}</span>
             <div className="toolbar-actions">
-              <IconButton label={rightFullscreen ? (isEnglish ? "Restore files panel" : "退出文件栏全屏") : (isEnglish ? "Maximize files panel" : "文件栏全屏")} onClick={() => { setRightOpen(true); setRightFullscreen((value) => !value); }} className={rightFullscreen ? "is-active" : ""}>{rightFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}</IconButton>
-              <IconButton label={isEnglish ? (bottomOpen ? "Hide bottom panel" : "Show bottom panel") : (bottomOpen ? "收起底部面板" : "呼出底部面板")} onClick={() => { setRightFullscreen(false); setBottomFullscreen(false); setBottomOpen((value) => !value); }} className={bottomOpen ? "is-active" : ""}><PanelBottom size={15} /></IconButton>
-              <IconButton label={isEnglish ? "Hide files panel" : "收起文件栏"} onClick={() => { setRightFullscreen(false); setRightOpen(false); }}><PanelRight size={15} /></IconButton>
+              <IconButton label={rightFullscreen ? (isEnglish ? "Restore files panel" : "退出文件栏全屏") : (isEnglish ? "Maximize files panel" : "文件栏全屏")} onClick={() => { setRightOpen(true); setRightFullscreen((value) => { if (value) setRightFullscreenBottomOpen(false); return !value; }); }} className={rightFullscreen ? "is-active" : ""}>{rightFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}</IconButton>
+              <IconButton label={isEnglish ? (rightFullscreenBottomOpen ? "Hide bottom panel" : "Show bottom panel") : (rightFullscreenBottomOpen ? "收起底部面板" : "呼出底部面板")} onClick={() => { if (rightFullscreen) setRightFullscreenBottomOpen((value) => !value); else { setBottomFullscreen(false); setBottomOpen((value) => !value); } }} className={(rightFullscreen ? rightFullscreenBottomOpen : bottomOpen) ? "is-active" : ""}><PanelBottom size={15} /></IconButton>
+              <IconButton label={isEnglish ? "Hide files panel" : "收起文件栏"} onClick={() => { setRightFullscreen(false); setRightFullscreenBottomOpen(false); setRightOpen(false); }}><PanelRight size={15} /></IconButton>
             </div>
           </div>
           {right}
+          {rightFullscreen && rightFullscreenBottomOpen && (
+            <section className="right-fullscreen-bottom bottom-panel is-open">
+              <div className="bottom-toolbar">
+                <span>{title}</span>
+                <div className="toolbar-actions">
+                  <IconButton label={bottomFullscreen ? (isEnglish ? "Restore bottom panel" : "还原底部面板") : (isEnglish ? "Maximize bottom panel" : "底部面板全屏")} onClick={toggleBottomFullscreen} className={bottomFullscreen ? "is-active" : ""}>{bottomFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}</IconButton>
+                  <IconButton label={isEnglish ? "Hide bottom panel" : "关闭底部面板"} onClick={() => { setBottomFullscreen(false); setRightFullscreenBottomOpen(false); }}><PanelBottom size={15} /></IconButton>
+                </div>
+              </div>
+              {bottom}
+            </section>
+          )}
         </aside>
       </div>
     </div>

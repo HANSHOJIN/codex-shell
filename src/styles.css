@@ -148,6 +148,8 @@ button:focus-visible { outline: 2px solid #6b8afd; outline-offset: 2px; }
 }
 .right-panel > .files-placeholder { height: calc(100% - 48px); }
 .right-panel.is-fullscreen { grid-column: 2 / 4; border-left: 0; border-radius: 14px 0 0 0; }
+.right-panel.is-fullscreen > .files-placeholder { flex: 1 1 auto; height: auto; }
+.right-fullscreen-bottom { flex: 0 0 var(--bottom-height); min-height: 0; border-top: 1px solid var(--line); background: var(--paper); }
 .app-shell.right-fullscreen .center-area { display: none; }
 
 .panel-toolbar, .center-toolbar, .bottom-toolbar {
