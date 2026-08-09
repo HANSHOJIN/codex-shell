@@ -147,6 +147,8 @@ button:focus-visible { outline: 2px solid #6b8afd; outline-offset: 2px; }
   border-left: 1px solid var(--line);
 }
 .right-panel > .files-placeholder { height: calc(100% - 48px); }
+.right-panel.is-fullscreen { grid-column: 2 / 4; border-left: 0; border-radius: 14px 0 0 0; }
+.app-shell.right-fullscreen .center-area { display: none; }
 
 .panel-toolbar, .center-toolbar, .bottom-toolbar {
   height: 48px;

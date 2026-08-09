@@ -10,7 +10,9 @@ import {
   Copy,
   ChevronDown,
   Globe2,
+  Maximize2,
   MessageSquare,
+  Minimize2,
   Minus,
   PanelBottom,
   PanelLeft,
@@ -201,6 +203,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
   const saved = initial.current;
   const [leftOpen, setLeftOpen] = useState(saved.leftOpen ?? true);
   const [rightOpen, setRightOpen] = useState(saved.rightOpen ?? true);
+  const [rightFullscreen, setRightFullscreen] = useState(false);
   const [bottomOpen, setBottomOpen] = useState(saved.bottomOpen ?? true);
   const [bottomFullscreen, setBottomFullscreen] = useState(false);
   const [leftWidth, setLeftWidth] = useState(saved.leftWidth ?? LEFT_DEFAULT);
@@ -372,7 +375,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
           }}><X size={14} /></WindowButton>
         </div>
       </header>
-      <div ref={shellRef} className={`app-shell ${dragging ? `is-dragging drag-${dragging}` : ""}`}>
+      <div ref={shellRef} className={`app-shell ${rightFullscreen ? "right-fullscreen" : ""} ${dragging ? `is-dragging drag-${dragging}` : ""}`}>
         <aside className={`panel left-panel ${leftOpen ? "is-open" : "is-closed"}`} aria-hidden={!leftOpen} inert={!leftOpen}>
           {settingsOpen ? (
             <SettingsSidebar onBack={() => setSettingsOpen(false)} language={language} />
@@ -393,7 +396,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
             <span className="center-label">{isEnglish ? "Main area" : "主区域"}</span>
             <div className="toolbar-actions">
               <IconButton label={isEnglish ? (bottomOpen ? "Hide bottom panel" : "Show bottom panel") : (bottomOpen ? "收起底部面板" : "展开底部面板")} onClick={() => { setBottomFullscreen(false); setBottomOpen((value) => !value); }} className={bottomOpen ? "is-active" : ""}><PanelBottom size={15} /></IconButton>
-              <IconButton label={isEnglish ? (rightOpen ? "Hide files panel" : "Show files panel") : (rightOpen ? "收起文件栏" : "展开文件栏")} onClick={() => setRightOpen((value) => !value)} className={rightOpen ? "is-active" : ""}><PanelRight size={15} /></IconButton>
+              <IconButton label={isEnglish ? (rightOpen ? "Hide files panel" : "Show files panel") : (rightOpen ? "收起文件栏" : "展开文件栏")} onClick={() => { setRightFullscreen(false); setRightOpen((value) => !value); }} className={rightOpen ? "is-active" : ""}><PanelRight size={15} /></IconButton>
             </div>
           </div>
           <section className="main-placeholder">{settingsOpen && settings ? settings : main}</section>
@@ -404,9 +407,15 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
           </section>
         </main>
 
-        {rightOpen && <div className="resize-handle vertical right-handle" role="separator" tabIndex={0} aria-orientation="vertical" aria-label="调整右侧栏宽度" onPointerDown={(e) => startDrag("right", e)} onKeyDown={(e) => resizeWithKeyboard("right", e)} />}
-        <aside className={`panel right-panel ${rightOpen ? "is-open" : "is-closed"}`} aria-hidden={!rightOpen} inert={!rightOpen}>
-          <div className="panel-toolbar right-toolbar"><span>{isEnglish ? "Files" : "文件"}</span><IconButton label={isEnglish ? "Hide files panel" : "收起文件栏"} onClick={() => setRightOpen(false)}><PanelRight size={15} /></IconButton></div>
+        {rightOpen && !rightFullscreen && <div className="resize-handle vertical right-handle" role="separator" tabIndex={0} aria-orientation="vertical" aria-label="调整右侧栏宽度" onPointerDown={(e) => startDrag("right", e)} onKeyDown={(e) => resizeWithKeyboard("right", e)} />}
+        <aside className={`panel right-panel ${rightOpen ? "is-open" : "is-closed"} ${rightFullscreen ? "is-fullscreen" : ""}`} aria-hidden={!rightOpen} inert={!rightOpen}>
+          <div className="panel-toolbar right-toolbar">
+            <span>{isEnglish ? "Files" : "文件"}</span>
+            <div className="toolbar-actions">
+              <IconButton label={rightFullscreen ? (isEnglish ? "Restore files panel" : "退出文件栏全屏") : (isEnglish ? "Maximize files panel" : "文件栏全屏")} onClick={() => { setRightOpen(true); setRightFullscreen((value) => !value); }} className={rightFullscreen ? "is-active" : ""}>{rightFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}</IconButton>
+              <IconButton label={isEnglish ? "Hide files panel" : "收起文件栏"} onClick={() => { setRightFullscreen(false); setRightOpen(false); }}><PanelRight size={15} /></IconButton>
+            </div>
+          </div>
           {right}
         </aside>
       </div>
