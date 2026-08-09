@@ -272,6 +272,12 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
     setDragging(kind);
   }, []);
 
+  const getRightMaxWidth = useCallback(() => {
+    const shellWidth = shellRef.current?.getBoundingClientRect().width ?? 1000;
+    const leftSpace = leftOpen ? leftWidth : 0;
+    return Math.max(MIN_SIDE, shellWidth - leftSpace - 240);
+  }, [leftOpen, leftWidth]);
+
   const resizeWithKeyboard = useCallback((kind: DragKind, event: React.KeyboardEvent) => {
     const step = event.shiftKey ? 32 : 8;
     let handled = true;
@@ -282,10 +288,10 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
       else if (event.key === "End") { setLeftOpen(true); setLeftWidth(420); }
       else handled = false;
     } else if (kind === "right") {
-      if (event.key === "ArrowLeft") setRightWidth((value) => clamp(value + step, MIN_SIDE, 440));
-      else if (event.key === "ArrowRight") setRightWidth((value) => clamp(value - step, MIN_SIDE, 440));
+      if (event.key === "ArrowLeft") setRightWidth((value) => clamp(value + step, MIN_SIDE, getRightMaxWidth()));
+      else if (event.key === "ArrowRight") setRightWidth((value) => clamp(value - step, MIN_SIDE, getRightMaxWidth()));
       else if (event.key === "Home") setRightOpen(false);
-      else if (event.key === "End") { setRightOpen(true); setRightWidth(440); }
+      else if (event.key === "End") { setRightOpen(true); setRightWidth(getRightMaxWidth()); }
       else handled = false;
     } else {
       if (event.key === "ArrowUp") setBottomHeight((value) => clamp(value + step, MIN_BOTTOM, 1200));
@@ -295,7 +301,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
       else handled = false;
     }
     if (handled) event.preventDefault();
-  }, []);
+  }, [getRightMaxWidth]);
 
   useEffect(() => {
     if (!dragging) return;
@@ -310,7 +316,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
       if (dragging === "right") {
         const next = bounds.right - event.clientX;
         if (next < MIN_SIDE * 0.62) { setDragging(null); setRightOpen(false); }
-        else { setRightOpen(true); setRightWidth(clamp(next, MIN_SIDE, 440)); }
+        else { setRightOpen(true); setRightWidth(clamp(next, MIN_SIDE, getRightMaxWidth())); }
       }
       if (dragging === "bottom") {
         const next = bounds.bottom - event.clientY;
@@ -335,7 +341,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
       window.removeEventListener("pointercancel", stop);
       window.removeEventListener("blur", stop);
     };
-  }, [dragging]);
+  }, [dragging, getRightMaxWidth]);
 
   useEffect(() => {
     try {
@@ -413,6 +419,7 @@ function ShellLayout({ title = "CodexShell", appName = "YourApp", language = "zh
             <span>{isEnglish ? "Files" : "文件"}</span>
             <div className="toolbar-actions">
               <IconButton label={rightFullscreen ? (isEnglish ? "Restore files panel" : "退出文件栏全屏") : (isEnglish ? "Maximize files panel" : "文件栏全屏")} onClick={() => { setRightOpen(true); setRightFullscreen((value) => !value); }} className={rightFullscreen ? "is-active" : ""}>{rightFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}</IconButton>
+              <IconButton label={isEnglish ? (bottomOpen ? "Hide bottom panel" : "Show bottom panel") : (bottomOpen ? "收起底部面板" : "呼出底部面板")} onClick={() => { setRightFullscreen(false); setBottomFullscreen(false); setBottomOpen((value) => !value); }} className={bottomOpen ? "is-active" : ""}><PanelBottom size={15} /></IconButton>
               <IconButton label={isEnglish ? "Hide files panel" : "收起文件栏"} onClick={() => { setRightFullscreen(false); setRightOpen(false); }}><PanelRight size={15} /></IconButton>
             </div>
           </div>
